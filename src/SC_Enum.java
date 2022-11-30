@@ -6,7 +6,7 @@ public class SC_Enum {
     int Kmin,Kmax;
     int l,h;
     Heuristical HH;  // 初始解
-public SC_Enum(Vertex q, int l, int h){
+public SC_Enum(int q, int l, int h){
     // input n
     G=new OriGraph(n);
     // input G
@@ -16,7 +16,7 @@ public SC_Enum(Vertex q, int l, int h){
     for(Vertex v: G.vertices)R.Add(v);
     C=new VertexSet();
 }
-    public void SCEnum(int q,int l,int h){
+    public void SCEnum(){
         Heuristical HH=new Heuristical();  // 初始解
         H=HH.H;
         if(Kmin<Kmax){
@@ -52,9 +52,14 @@ public SC_Enum(Vertex q, int l, int h){
                 dfs(C1, R1);
                 dfs(C2, R2);
             }
+
         }
 
+
     }
-
-
+    public  void Output(){
+        for(Vertex v:H.Hset){
+            System.out.println(v.id);
+        }
+    }
 }

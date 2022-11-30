@@ -1,7 +1,4 @@
 import java.util.*;
-
-
-
 public class OriGraph {
     Integer num;
     int MinDegree,MaxDegree;// 图中最大/小度数
@@ -9,14 +6,25 @@ public class OriGraph {
     //VertexSet U;
     //HashMap <Integer,Vertex>Id2Vex; // vertices[id]
     HashMap<Integer, VertexSet> Graph;
-    HashMap<Vertex,Integer>CoreNumber; // cn[q]的值
+    HashMap<Integer,Integer>CoreNumber; // cn[q]的值
     public OriGraph(int n) {
         num = n;
         vertices = new Vertex[n];
         Graph = new HashMap<>();
     }
+    public OriGraph() {
+        num = 0;
+        vertices = new Vertex[100];
+        Graph = new HashMap<>();
+    }
+    public OriGraph(OriGraph G) {
+        num = G.num;
+        vertices = G.vertices;
+        Graph = new HashMap<>(G.Graph);
+    }
     void DataReader(){
         //input
+
     }
     void CalDegree(){ // 计算每个点原图度数
         MinDegree=MaxDegree=Graph.get(vertices[0].id).Size();
@@ -37,7 +45,7 @@ public class OriGraph {
             for(Vertex u:rest){
                 if(u.degree<k){
                     if(!CoreNumber.containsKey(u)){
-                        CoreNumber.put(u,k-1);
+                        CoreNumber.put(u.id,k-1);
                         que.add(u);
                         rest.remove(u);
                     }
@@ -50,7 +58,7 @@ public class OriGraph {
                         que.add(v);
                         rest.remove(v);
                         if(!CoreNumber.containsKey(u)) {
-                            CoreNumber.put(u, k - 1);
+                            CoreNumber.put(u.id, k - 1);
                         }
                     }
                 }

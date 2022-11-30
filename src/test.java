@@ -1,13 +1,7 @@
-class  struct{
-    int a,b;
-    public  struct(int a,int b){
-        this.a=a;
-        this.b=b;
-    }
-}
+
 class  test {
-    struct x,y;
-    public test (  struct x,struct y){
+    int x,y;
+    public test (  int x,int y){
         this.x=x;
         this.y=y;
     }
@@ -16,7 +10,7 @@ class  test {
 //        return 1;
 //    }
     void addd(){
-        x.a++;
-        y.b++;
+        x++;
+        y++;
     }
 }
