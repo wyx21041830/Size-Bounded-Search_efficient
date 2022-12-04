@@ -1,9 +1,11 @@
 import java.util.Comparator;
 
 public class Comparators {
-    Comparator<Vertex> cmp;
-
+    Comparator<Vertex> cmp1,cmp2;
     public Comparators() {
-        Comparator<Vertex> cmp = (o1, o2) -> Integer.compare(o1.degree, o2.degree);
+        cmp1 = Comparator.comparingInt(o -> o.degree);
+        cmp2= (o1, o2) -> Integer.compare(o2.connectionScore, o1.connectionScore);
     }
+
+
 }

@@ -2,6 +2,7 @@ class Vertex  {
     int id;
     int degree;
     int coreNumber;
+    int connectionScore;
     public int getId() {
         return id;
     }

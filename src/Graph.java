@@ -8,6 +8,7 @@ public class Graph {
     public Graph() {
         vertices =  new VertexSet();
         relation = new HashMap<>();
+        MinDegree=MaxDegree=0;
     }
     public Graph(Graph G) {
         vertices =new VertexSet(G.vertices);
