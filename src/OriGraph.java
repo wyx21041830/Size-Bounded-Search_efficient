@@ -1,51 +1,44 @@
 import java.util.*;
 public class OriGraph {
-    Integer num;
     int MinDegree,MaxDegree;// 图中最大/小度数
-    Vertex [] vertices;
-    //VertexSet U;
-    //HashMap <Integer,Vertex>Id2Vex; // vertices[id]
+    VertexSet vertices ;// 存点
+    //HashMap <Integer,Vertex>Id2Vex;
     HashMap<Integer, VertexSet> Graph;
-    HashMap<Integer,Integer>CoreNumber; // cn[q]的值
-    public OriGraph(int n) {
-        num = n;
-        vertices = new Vertex[n];
-        Graph = new HashMap<>();
-    }
+    //HashMap<Integer,Integer>CoreNumber; // cn[q]的值
     public OriGraph() {
-        num = 0;
-        vertices = new Vertex[100];
+        vertices =  new VertexSet();
         Graph = new HashMap<>();
     }
     public OriGraph(OriGraph G) {
-        num = G.num;
-        vertices = G.vertices;
+        vertices =new VertexSet(G.vertices);
         Graph = new HashMap<>(G.Graph);
+        this.MinDegree= G.MinDegree;
+        this.MaxDegree=G.MaxDegree;
     }
     void DataReader(){
         //input
-
     }
     void CalDegree(){ // 计算每个点原图度数
-        MinDegree=MaxDegree=Graph.get(vertices[0].id).Size();
-        for(Vertex v:vertices){
+        MinDegree=MaxDegree=Graph.get(vertices.Hset.iterator().next().id).Size();
+        for(Vertex v:vertices.Hset){
             v.degree=Graph.get(v.id).Size();
             MinDegree=Math.min(MinDegree,v.degree);
             MaxDegree=Math.max(MaxDegree,v.degree);
         }
     }
-    void CalAllCN(){ // 计算所有k-core
-        Vertex [] vertices1 = vertices;
+    void CalCoreNum(){ // 计算所有k-core
         HashMap<Integer , VertexSet>G=Graph;
         Queue<Vertex>que= new LinkedList<>() ;//
         //剩余点
-        HashSet<Vertex> rest = new HashSet<>(Arrays.asList(vertices));
+        HashSet<Vertex>vis=new HashSet<>();
+        HashSet<Vertex> rest = new HashSet<>(vertices.Hset);
         for(int k=1;k<=MaxDegree;k++){ // 计算 coreness
             if(rest.isEmpty())break;
             for(Vertex u:rest){
                 if(u.degree<k){
-                    if(!CoreNumber.containsKey(u)){
-                        CoreNumber.put(u.id,k-1);
+                    if(!vis.contains(u)){
+                        vis.add(u);
+                        u.coreNumber=k-1;
                         que.add(u);
                         rest.remove(u);
                     }
@@ -53,26 +46,25 @@ public class OriGraph {
             }
             while(que.size()>0){
                 Vertex u=que.poll();
-                for(Vertex v:G.get(u).Hset){
-                    if(--vertices1[v.id].degree<k){
+                for(Vertex v:G.get(u.id).Hset){
+                    if(--v.degree<k){
                         que.add(v);
                         rest.remove(v);
-                        if(!CoreNumber.containsKey(u)) {
-                            CoreNumber.put(u.id, k - 1);
-                        }
+                        if(!vis.contains(u)) {
+                            vis.add(u);
+                            u.coreNumber=k-1;                        }
                     }
                 }
             }
-
         }
     }
-    void Init(){
-        DataReader();
-        CalDegree();
-        //CalAllCN();
-    }
-    void DelFromG(Vertex v){//从图中删除
-        Graph.remove(v.id);
-        num--;
+    void DelFromG(Vertex u){//从图中删除同时
+        Graph.remove(u.id);
+        for(Vertex v:vertices.Hset){//
+            Graph.get(v.id).DelAll(v);
+        }
+        for(Vertex v:Graph.get(u.id).Hset){ // 更新度
+            v.degree--;
+        }
     }
 }

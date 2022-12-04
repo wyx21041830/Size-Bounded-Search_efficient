@@ -1,12 +1,13 @@
 class Vertex  {
     int id;
     int degree;
-    int degreeC;
+    int coreNumber;
     public int getId() {
         return id;
     }
     public Vertex(int id){
         this.id=id;
-        degreeC=degree=0;
+        degree=0;
+        coreNumber=0;
     }
 }
