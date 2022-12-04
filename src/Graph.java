@@ -1,17 +1,17 @@
 import java.util.*;
-public class OriGraph {
+public class Graph {
     int MinDegree,MaxDegree;// 图中最大/小度数
     VertexSet vertices ;// 存点
     //HashMap <Integer,Vertex>Id2Vex;
-    HashMap<Integer, VertexSet> Graph;
+    HashMap<Integer, VertexSet> relation;
     //HashMap<Integer,Integer>CoreNumber; // cn[q]的值
-    public OriGraph() {
+    public Graph() {
         vertices =  new VertexSet();
-        Graph = new HashMap<>();
+        relation = new HashMap<>();
     }
-    public OriGraph(OriGraph G) {
+    public Graph(Graph G) {
         vertices =new VertexSet(G.vertices);
-        Graph = new HashMap<>(G.Graph);
+        relation = new HashMap<>(G.relation);
         this.MinDegree= G.MinDegree;
         this.MaxDegree=G.MaxDegree;
     }
@@ -19,15 +19,15 @@ public class OriGraph {
         //input
     }
     void CalDegree(){ // 计算每个点原图度数
-        MinDegree=MaxDegree=Graph.get(vertices.Hset.iterator().next().id).Size();
+        MinDegree=MaxDegree= relation.get(vertices.Hset.iterator().next().id).Size();
         for(Vertex v:vertices.Hset){
-            v.degree=Graph.get(v.id).Size();
+            v.degree= relation.get(v.id).Size();
             MinDegree=Math.min(MinDegree,v.degree);
             MaxDegree=Math.max(MaxDegree,v.degree);
         }
     }
     void CalCoreNum(){ // 计算所有k-core
-        HashMap<Integer , VertexSet>G=Graph;
+        HashMap<Integer , VertexSet>G= relation;
         Queue<Vertex>que= new LinkedList<>() ;//
         //剩余点
         HashSet<Vertex>vis=new HashSet<>();
@@ -59,11 +59,11 @@ public class OriGraph {
         }
     }
     void DelFromG(Vertex u){//从图中删除同时
-        Graph.remove(u.id);
+        relation.remove(u.id);
         for(Vertex v:vertices.Hset){//
-            Graph.get(v.id).DelAll(v);
+            relation.get(v.id).DelAll(v);
         }
-        for(Vertex v:Graph.get(u.id).Hset){ // 更新度
+        for(Vertex v: relation.get(u.id).Hset){ // 更新度
             v.degree--;
         }
     }

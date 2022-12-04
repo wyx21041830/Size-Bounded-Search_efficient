@@ -4,7 +4,7 @@ public class Heuristical {
         VertexSet H= new VertexSet();
     }
 
-    public  void GenerateInitAns(OriGraph G,Vertex q){
+    public  void GenerateInitAns(Graph G, Vertex q){
         //生成初始解H
     }
 }
