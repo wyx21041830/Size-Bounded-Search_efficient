@@ -69,7 +69,7 @@ class VertexSet {
     }
     public void UpdateTset2() { // 若一直只对Hset操作
         Tset = new TreeSet<>(Cmp.cmp2);
-        Tset.addAll(Hset);
+        Tset2.addAll(Hset);
     }
 
 }
