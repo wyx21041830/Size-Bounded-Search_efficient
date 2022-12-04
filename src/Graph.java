@@ -59,7 +59,7 @@ public class Graph {
             }
         }
     }
-    void DelFromG(Vertex u){//从图中删除同时
+    void DelFromG(Vertex u){//从图中删除同时更新内部度
         relation.remove(u.id);
         for(Vertex v:vertices.Hset){//
             relation.get(v.id).DelAll(v);
@@ -67,5 +67,18 @@ public class Graph {
         for(Vertex v: relation.get(u.id).Hset){ // 更新度
             v.degree--;
         }
+    }
+    void Add2G(Vertex u,Graph G){//从原图中加入
+        relation.put(u.id,new VertexSet());
+        for(Vertex v:vertices.Hset){//
+            if(G.relation.get(u.id).ID.contains(v.id)){
+                relation.get(v.id).Add2All(u);
+                relation.get(u.id).Add2All(v);
+                u.id++;
+                v.id++;
+            }
+
+            }
+
     }
 }

@@ -24,7 +24,12 @@ public class SC_Enum {
         }
     }
 
-    public  void discardFromR(Vertex v){
+    public  void discardFromR(Vertex u){
+        R.vertices.DelV(u);
+        for(Vertex v:R.relation.get(u.id).Hset){
+
+        }
+        Rc.vertices.DelV(u);
 
     }
     public  void discardFromC(Vertex v){
