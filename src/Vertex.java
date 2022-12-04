@@ -11,4 +11,9 @@ class Vertex  {
         degree=0;
         coreNumber=0;
     }
+    public Vertex(Vertex v){
+        this.id=v.id;
+        this.degree=v.degree;
+        this.coreNumber=v.coreNumber;
+    }
 }
