@@ -3,35 +3,28 @@ import java.util.*;
 public class Graph {
     int MinDegree, MaxDegree;// 图中最大/小度数
     VertexSet vertices;// 存点
-    HashMap <Integer,Vertex>Id2Vex;// 建立id到vertex的映射
     // 获取该图中对应id的点信息
     HashMap<Integer, VertexSet> relation;
 
-    //HashMap<Integer,Integer>CoreNumber; // cn[q]的值
+    //构造函数的浅拷贝问题
     public Graph() {
         vertices = new VertexSet();
         relation = new HashMap<>();
-        Id2Vex = new HashMap<>();
         MinDegree = MaxDegree = 0;
     }
 
     public Graph(Graph G) {// 浅拷贝问题
         vertices = new VertexSet(G.vertices);
         relation = new HashMap<>(G.relation);
-        Id2Vex = new HashMap<>(G.Id2Vex);
         this.MinDegree = G.MinDegree;
         this.MaxDegree = G.MaxDegree;
     }
 
     void DataReader() {
         //input
-        buildIdMap();
     }
-    public void buildIdMap(){
-        for(Vertex v:vertices.Hset){
-            Id2Vex.put(v.id,v);
-        }
-    }
+
+
     void CalDegree() { // 计算每个点原图度数 O(n)
         MinDegree = MaxDegree = relation.get(vertices.Hset.iterator().next().id).Size();
         for (Vertex v : vertices.Hset) {
@@ -75,12 +68,13 @@ public class Graph {
         }
     }
 
-    void DelFromGByInfo(Vertex u) {// 删除点u (信息 度数完全匹配(同一图中对应点))
+    //内部增删 ： R，C
+    void InnerDelFromGByInfo(Vertex u) {// 删除点u (信息 度数完全匹配(同一图中对应点))
         //从图中删除同时更新内部度
-        if(!vertices.ID.contains(u.id))return; // 本来就没有
+        if (!vertices.ID.contains(u.id)) return; // 本来就没有
         relation.remove(u.id);
         vertices.DelAll(u);
-        Id2Vex.remove(u.id);
+        vertices.Id2Vex.remove(u.id);
         for (Vertex v : vertices.Hset) {//
             relation.get(v.id).DelAll(v);
         }
@@ -88,32 +82,30 @@ public class Graph {
             v.degree--;
         }
     }
-    void DelFromGById(int id){// 删除id对应的同一个点 可能不同图中
+
+    void InnerDelFromGById(int id) {// 删除id对应的同一个点 可能不同图中
         //通过映射到图内信息实现
-        if(!vertices.ID.contains(id))return; // 本来就没有
-        Vertex v=Id2Vex.get(id);
-        DelFromGByInfo(v);
+        if (!vertices.ID.contains(id)) return; // 本来就没有
+        Vertex v =vertices.Id2Vex.get(id);
+        InnerDelFromGByInfo(v);
     }
 
-        // 同理
-    void Add2GByInfo(Vertex u, Graph G) {//从原图中加入
-        if(vertices.ID.contains(u.id))return ; //本来就有
-        vertices.Add(u);
-        Id2Vex.put(u.id,u);
+    // 同理
+    void InnerAdd2GByInfo(Vertex u, Graph G) {//从原图中加入
+        if (vertices.ID.contains(u.id)) return; //本来就有
+        vertices.Add(u);u.degree=0;//刚加入
+        vertices.Id2Vex.put(u.id, u);
         relation.put(u.id, new VertexSet());
         for (Vertex v : vertices.Hset) {//
             if (G.relation.get(u.id).ID.contains(v.id)) {
-                relation.get(v.id).Add2All(u);
-                relation.get(u.id).Add2All(v);
+                if(!relation.get(v.id).ID.contains(u.id))relation.get(v.id).Add2All(u);
+                if(!relation.get(u.id).ID.contains(v.id))relation.get(u.id).Add2All(v);
                 u.degree++;
                 v.degree++;
             }
         }
     }
 
-    void Add2GById(int id,Graph G){
-        if(vertices.ID.contains(id))return;
-        Vertex v= Id2Vex.get(id);
-        Add2GByInfo(v,G);
-    }
+
 }
+//外部删  Cr  Rc

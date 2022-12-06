@@ -15,5 +15,6 @@ class Vertex  {
         this.id=v.id;
         this.degree=v.degree;
         this.coreNumber=v.coreNumber;
+        this.connectionScore= v.connectionScore;
     }
 }
