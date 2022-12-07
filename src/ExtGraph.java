@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 
 public class ExtGraph extends  Graph {//Rc  Cr
     VertexSet Oppvertex;//存对面的点  度信息为图内部度 eg:Rc中c的点在R中的度
@@ -51,20 +52,16 @@ public class ExtGraph extends  Graph {//Rc  Cr
         vertices.Id2Vex.put(u.id, u);
         relation.put(u.id, new HashSet<>());
         for(int id:G.relation.get(u.id)){
-            if(Oppvertex.ID.contains(u.id)){//子图中存在该边
+            if(Oppvertex.ID.contains(id)){//子图中存在该边
                 //连边  更新度
                 relation.get(u.id).add(id);
                 relation2.get(id).add(u.id);
-            }
-        }
-        for (Vertex v : Oppvertex.Hset) {//
-            if (G.relation.get(u.id).ID.contains(v.id)) {
-                if (!relation.get(u.id).ID.contains(v.id)) relation.get(u.id).Add2All(v);
-                if (!relation2.get(v.id).ID.contains(u.id)) relation.get(v.id).Add2All(u);//
-                u.degree++;
+                Vertex v=Oppvertex.Id2Vex.get(id);
                 v.degree++;
+                u.degree++;
             }
         }
+
     }
 
     void InnerAdd2GById(int id, Graph G) {//从原图中加入
@@ -73,16 +70,46 @@ public class ExtGraph extends  Graph {//Rc  Cr
         this.InnerAdd2GByInfo(v,G);
     }
     void OuterDelFromGByInfo(Vertex u) {//删对面的
+        //删边
+        for(int id:relation2.get(u.id)){
+            if(vertices.ID.contains(id)){
+                Vertex v= vertices.Id2Vex.get(id);
+                relation.get(id).remove(u.id);
+                v.degree--;
+            }
+        }
+        relation2.remove(u.id);
         Oppvertex.DelAll(u);
         Oppvertex.Id2Vex.remove(u.id);
-        for (Vertex v : vertices.Hset) {//
-            relation.get(v.id).DelAll(v);
-        }
-        for (Vertex v : relation2.get(u.id).Hset) { // 更新度
-            v.degree--;
-        }
-
+    }
+    void OuterDelFromGById(int id){
+        if(!Oppvertex.ID.contains(id))return;
+        Vertex v= Oppvertex.Id2Vex.get(id);
+        OuterDelFromGByInfo(v);
     }
 
+    void OuterAdd2GByInfo(Vertex u, Graph G) {//从原图中加入
+        if (Oppvertex.ID.contains(u.id)) return; //本来就有
+        Oppvertex.Add(u);
+        u.degree = 0;//刚加入
+        Oppvertex.Id2Vex.put(u.id, u);
+        relation2.put(u.id, new HashSet<>());
+        for(int id:G.relation.get(u.id)){
+            if(vertices.ID.contains(id)){//子图中存在该边
+                //连边  更新度
+                relation.get(id).add(u.id);
+                relation2.get(u.id).add(id);
+                Vertex v=Oppvertex.Id2Vex.get(id);
+                v.degree++;
+                u.degree++;
+            }
+        }
+    }
+
+    void OuterAdd2GById(int id, Graph G) {//从原图中加入
+        if (Oppvertex.ID.contains(id)) return; //本来就有
+        Vertex v =vertices.Id2Vex.get(id);
+        this.OuterAdd2GByInfo(v,G);
+    }
 }
 ;
