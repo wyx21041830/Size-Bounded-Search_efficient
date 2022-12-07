@@ -22,11 +22,16 @@ public class ExtGraph extends  Graph {//Rc  Cr
     }
 
     void CalOpDegree() {//算对面度计算
-
+        MinDegree = MaxDegree = relation2.get(vertices.Hset.iterator().next().id).size();
+        for (Vertex v : vertices.Hset) {
+            v.degree = relation2.get(v.id).size();
+            MinDegree = Math.min(MinDegree, v.degree);
+            MaxDegree = Math.max(MaxDegree, v.degree);
+        }
     }
 
     //内部删
-    void InnerDelFromGByInfo(Vertex u) {// 删除点u (信息 度数完全匹配(同一图中对应点))
+    void InnerDelFromG(Vertex u) {// 删除点u (信息 度数完全匹配(同一图中对应点))
         if (!vertices.ID.contains(u.id)) return; // 本来就没有
         vertices.DelAll(u);
         vertices.Id2Vex.remove(u.id);
@@ -38,14 +43,14 @@ public class ExtGraph extends  Graph {//Rc  Cr
         relation.remove(u.id);
     }
 
-    void InnerDelFromGById(int id) {// 删除id对应的同一个点 可能不同图中
+    void InnerDelFromG(int id) {// 删除id对应的同一个点 可能不同图中
         //通过映射到图内信息实现
         if (!vertices.ID.contains(id)) return; // 本来就没有
         Vertex v = vertices.Id2Vex.get(id);
-        this.InnerDelFromGByInfo(v);
+        this.InnerDelFromG(v);
     }
     // 同理
-    void InnerAdd2GByInfo(Vertex u, Graph G) {//从原图中加入
+    void InnerAdd2G(Vertex u, Graph G) {//从原图中加入
         if (vertices.ID.contains(u.id)) return; //本来就有
         vertices.Add(u);
         u.degree = 0;//刚加入
@@ -64,12 +69,12 @@ public class ExtGraph extends  Graph {//Rc  Cr
 
     }
 
-    void InnerAdd2GById(int id, Graph G) {//从原图中加入
+    void InnerAdd2G(int id, Graph G) {//从原图中加入
         if (vertices.ID.contains(id)) return; //本来就有
         Vertex v =vertices.Id2Vex.get(id);
-        this.InnerAdd2GByInfo(v,G);
+        this.InnerAdd2G(v,G);
     }
-    void OuterDelFromGByInfo(Vertex u) {//删对面的
+    void OuterDelFromG(Vertex u) {//删对面的
         //删边
         for(int id:relation2.get(u.id)){
             if(vertices.ID.contains(id)){
@@ -82,13 +87,13 @@ public class ExtGraph extends  Graph {//Rc  Cr
         Oppvertex.DelAll(u);
         Oppvertex.Id2Vex.remove(u.id);
     }
-    void OuterDelFromGById(int id){
+    void OuterDelFromG(int id){
         if(!Oppvertex.ID.contains(id))return;
         Vertex v= Oppvertex.Id2Vex.get(id);
-        OuterDelFromGByInfo(v);
+        OuterDelFromG(v);
     }
 
-    void OuterAdd2GByInfo(Vertex u, Graph G) {//从原图中加入
+    void OuterAdd2G(Vertex u, Graph G) {//从原图中加入
         if (Oppvertex.ID.contains(u.id)) return; //本来就有
         Oppvertex.Add(u);
         u.degree = 0;//刚加入
@@ -106,10 +111,10 @@ public class ExtGraph extends  Graph {//Rc  Cr
         }
     }
 
-    void OuterAdd2GById(int id, Graph G) {//从原图中加入
+    void OuterAdd2G(int id, Graph G) {//从原图中加入
         if (Oppvertex.ID.contains(id)) return; //本来就有
         Vertex v =vertices.Id2Vex.get(id);
-        this.OuterAdd2GByInfo(v,G);
+        this.OuterAdd2G(v,G);
     }
 }
 ;

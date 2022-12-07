@@ -69,7 +69,7 @@ public class Graph {
     }
 
     //内部增删 ： R，C
-    void InnerDelFromGByInfo(Vertex u) {// 删除点u (信息 度数完全匹配(同一图中对应点))
+    void InnerDelFromG (Vertex u) {// 删除点u (信息 度数完全匹配(同一图中对应点))
         //从图中删除同时更新内部度
         if (!vertices.ID.contains(u.id)) return; // 本来就没有
         vertices.DelAll(u);
@@ -81,15 +81,15 @@ public class Graph {
         relation.remove(u.id);
     }
 
-    void InnerDelFromGById(int id) {// 删除id对应的同一个点 可能不同图中
+    void InnerDelFromG(int id) {// 删除id对应的同一个点 可能不同图中
         //通过映射到图内信息实现
         if (!vertices.ID.contains(id)) return; // 本来就没有
         Vertex v =vertices.Id2Vex.get(id);
-        InnerDelFromGByInfo(v);
+        InnerDelFromG(v);
     }
 
     // 同理
-    void InnerAdd2GByInfo(Vertex u, Graph G) {//从原图中加入
+    void InnerAdd2G(Vertex u, Graph G) {//从原图中加入
         if (vertices.ID.contains(u.id)) return; //本来就有
         vertices.Add(u);u.degree=0;//刚加入
         vertices.Id2Vex.put(u.id, u);
@@ -104,10 +104,10 @@ public class Graph {
         }
     }
 
-    void InnerAdd2GById(int id, Graph G) {//从原图中加入
+    void InnerAdd2G(int id, Graph G) {//从原图中加入
         if (vertices.ID.contains(id)) return; //本来就有
         Vertex v =vertices.Id2Vex.get(id);
-        InnerAdd2GByInfo(v,G);
+        InnerAdd2G(v,G);
     }
 }
 //外部删  Cr  Rc
