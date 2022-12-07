@@ -5,14 +5,12 @@ public class Graph {
     VertexSet vertices;// 存点
     // 获取该图中对应id的点信息
     HashMap<Integer, VertexSet> relation;
-
     //构造函数的浅拷贝问题
     public Graph() {
         vertices = new VertexSet();
         relation = new HashMap<>();
         MinDegree = MaxDegree = 0;
     }
-
     public Graph(Graph G) {// 浅拷贝问题
         vertices = new VertexSet(G.vertices);
         relation = new HashMap<>(G.relation);
@@ -106,6 +104,11 @@ public class Graph {
         }
     }
 
+    void InnerAdd2GById(int id, Graph G) {//从原图中加入
+        if (vertices.ID.contains(id)) return; //本来就有
+        Vertex v =vertices.Id2Vex.get(id);
+        InnerAdd2GByInfo(v,G);
+    }
 
 }
 //外部删  Cr  Rc
