@@ -30,7 +30,7 @@ public class ExtGraph extends  Graph{//Rc  Cr
         }
         for (Vertex v : relation.get(u.id).Hset) { // 更新度
             v.degree--;
-            if(v.degree==0)Oppvertex.DelV(v);//
+            if(v.degree==0)Oppvertex.DelV(v);//lkl
         }
     }
 
